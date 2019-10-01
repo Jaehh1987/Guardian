@@ -23,6 +23,9 @@
         <activity android:name=".MapActivity">
 
         </activity>
+        <activity android:name=".InfoActivity">
+
+        </activity>
         <activity android:name=".NavigateActivity">
 
         </activity>
