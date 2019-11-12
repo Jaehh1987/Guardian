@@ -25,4 +25,12 @@
 
     </Button>
 
+    <ListView
+        android:id="@+id/listViewCrime"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_weight="1" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
