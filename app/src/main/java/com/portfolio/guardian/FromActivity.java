@@ -14,7 +14,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
