@@ -44,7 +44,8 @@
             android:id="@+id/tvListNeighborhood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Neighborhood" />
+            android:layout_marginRight="10dp"
+            android:text="Neighborhood:" />
 
         <TextView
             android:id="@+id/tvListNeighborhoodValue"

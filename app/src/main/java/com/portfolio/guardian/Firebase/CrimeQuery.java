@@ -1,14 +1,10 @@
-package com.portfolio.guardian;
+package com.portfolio.guardian.Firebase;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,33 +12,37 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.portfolio.guardian.Util.Crime;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ToActivity extends AppCompatActivity {
+public class CrimeQuery extends AsyncTask<String, String, ArrayList<Crime>> {
 
-    ListView listView;
+    private final Activity activity;
+    private final ListView listView;
     DatabaseReference databaseCrime;
     ArrayList<Crime> crimeList;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_to);
+    public CrimeQuery(final Activity activity, final ListView listView) {
+        this.activity = activity;
+        this.listView = listView;
+    }
 
+    protected void onPreExecute() {
         databaseCrime = FirebaseDatabase.getInstance().getReference();
         crimeList = new ArrayList<>();
-        listView = findViewById(R.id.listViewCrime2);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected ArrayList<Crime> doInBackground(String... strings) {
 
-        Query testQuery = databaseCrime.orderByChild("NEIGHBOURHOOD").equalTo("West End");
+        String neighborhood = strings[0];
+        crimeList.clear();
+
+        Query testQuery = databaseCrime.orderByChild("NEIGHBOURHOOD").equalTo(neighborhood);
         testQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -68,18 +68,16 @@ public class ToActivity extends AppCompatActivity {
 
                     crimeList.add(crime);
                 }
-
-                CrimeListAdapter crimeListAdapter = new CrimeListAdapter(ToActivity.this, crimeList);
-                listView.setAdapter(crimeListAdapter);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
+        return crimeList;
     }
 
-    public void moveMap(View view) {
-        Intent intent = new Intent(this, NavigateActivity.class);
-        startActivity(intent);
-    }
+    @Override
+    protected void onProgressUpdate(String... values) {}
+
+    @Override
+    protected void onPostExecute(ArrayList<Crime> crimes) {}
 }
