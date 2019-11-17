@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -37,7 +38,7 @@ import com.portfolio.guardian.DirectionFinder.DirectionFinder;
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback,DirectionFinderListener{
 
     private GoogleMap mMap;
-    private Button btnFindPath;
+    // private Button btnFindPath;
     private EditText startaddress;
     private EditText destinationaddress;
     private List<Marker> originMarkers = new ArrayList<>();
@@ -57,16 +58,24 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
-        btnFindPath = findViewById(R.id.btnFindPath);
+        Intent intent = getIntent();
+        String start =intent.getStringExtra("start");
+        String destination =intent.getStringExtra("destination");
+
+        //btnFindPath = findViewById(R.id.btnFindPath);
         startaddress = findViewById(R.id.etOrigin);
         destinationaddress = findViewById(R.id.etDestination);
 
-        btnFindPath.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendRequest();
-            }
-        });
+        startaddress.setText(start);
+        destinationaddress.setText(destination);
+        sendRequest();
+
+//        btnFindPath.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                sendRequest();
+//            }
+//        });
     }
 
     private void sendRequest() {

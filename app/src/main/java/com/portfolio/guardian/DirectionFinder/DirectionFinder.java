@@ -23,7 +23,7 @@ import java.util.List;
 
 public class DirectionFinder {
     //private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
-    private static final String GOOGLE_API_KEY = "AIzaSyAvEuBe2EO5JJ3ZcIlmyJxu5--scO7iwq8";
+    private static final String GOOGLE_API_KEY = "";
     private DirectionFinderListener listener;
     private String start;
     private String destination;
