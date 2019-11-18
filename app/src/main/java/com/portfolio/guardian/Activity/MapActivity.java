@@ -74,17 +74,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         btnFindPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (startingPointMarker != null) {
-                    for (Marker m : startingPointMarker) {
-                        m.remove();
-                    }
-                }
-
-                if (polylinePaths != null) {
-                    for (Polyline p : polylinePaths) {
-                        p.remove();
-                    }
-                }
                 sendRequestFromGuardian();
             }
         });
@@ -96,6 +85,18 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         if (origin.isEmpty() || destination.isEmpty()) {
             Toast.makeText(this, "Opps! Maybe you forgot to add something!", Toast.LENGTH_SHORT).show();
             return;
+        }
+
+        if (startingPointMarker != null) {
+            for (Marker m : startingPointMarker) {
+                m.remove();
+            }
+        }
+
+        if (polylinePaths != null) {
+            for (Polyline p : polylinePaths) {
+                p.remove();
+            }
         }
 
         try {
@@ -122,6 +123,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             return;
         }
         mMap.setMyLocationEnabled(true);
+
     }
 
     @Override
@@ -140,14 +142,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             ((TextView) findViewById(R.id.tvDuration)).setText(route.duration.text);
             ((TextView) findViewById(R.id.tvDistance)).setText(route.distance.text);
 
-            startingPointMarker.add(mMap.addMarker(new MarkerOptions()
-                    .title(origin)
-                    .position(route.startLocation)));
+            startingPointMarker.add
+                    (mMap.addMarker(new MarkerOptions().title(origin).position(route.startLocation)));
+            // .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
 
-            destinationPointMarker.add(mMap.addMarker(new MarkerOptions()
-                    .title(destination)
-                    .position(route.endLocation)));
-
+            destinationPointMarker.add
+                    (mMap.addMarker(new MarkerOptions().title(destination).position(route.endLocation)));
+            //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)
 
             PolylineOptions polylineOptions =
                     new PolylineOptions().geodesic(true).color(Color.GREEN).width(7);
@@ -168,16 +169,16 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         }
 
     }
-
-    public List<Route> GetUserRoute(List<Route> r) {
-        for (int i = 0; i < userRoutes.size(); i++) {
-            System.out.println(userRoutes.get(i).startAddress);
-            System.out.println(userRoutes.get(i).endAddress);
-            System.out.println(userRoutes.get(i).startLocation);
-            System.out.println(userRoutes.get(i).endLocation);
-        }
-        return r;
-    }
+//
+//    public List<Route> GetUserRoute(List<Route> r) {
+//        for (int i = 0; i < userRoutes.size(); i++) {
+//            System.out.println(userRoutes.get(i).startAddress);
+//            System.out.println(userRoutes.get(i).endAddress);
+//            System.out.println(userRoutes.get(i).startLocation);
+//            System.out.println(userRoutes.get(i).endLocation);
+//        }
+//        return r;
+//    }
 }
 
 
