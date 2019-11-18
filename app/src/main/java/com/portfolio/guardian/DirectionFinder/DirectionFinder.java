@@ -20,10 +20,9 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class DirectionFinder {
     //private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
-    private static final String GOOGLE_API_KEY = "";
+    private static final String GOOGLE_API_KEY = "AIzaSyDFrGGDXsZT5U_76XcBYq93EVxGnSWK-GQ";
     private DirectionFinderListener listener;
     private String start;
     private String destination;
@@ -37,7 +36,6 @@ public class DirectionFinder {
         listener.onDirectionFinderStart();
         new DownloadRawData().execute(createUrl());
     }
-
 
     private String createUrl() throws UnsupportedEncodingException {
         String urlOrigin = URLEncoder.encode(start, "utf-8");
