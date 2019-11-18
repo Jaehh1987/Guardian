@@ -21,7 +21,7 @@ import java.util.List;
 
 
 public class DirectionFinder {
-    private static final String GOOGLE_API_KEY = "AIzaSyCi5orinfdbP5W9Vlv9lPuPPKOZgqmBhTI";
+    private static final String GOOGLE_API_KEY = "Your Code";
     private DirectionFinderListener finder;
     private String start;
     private String destination;
