@@ -3,7 +3,6 @@ package com.portfolio.guardian.DirectionFinder;
 import android.os.AsyncTask;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.portfolio.guardian.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,29 +21,25 @@ import java.util.List;
 
 
 public class DirectionFinder {
-    //private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
-    private static final String GOOGLE_API_KEY = "AIzaSyAvEuBe2EO5JJ3ZcIlmyJxu5--scO7iwq8";
-    private DirectionFinderListener listener;
+    private static final String GOOGLE_API_KEY = "YOUR_CODE";
+    private DirectionFinderListener finder;
     private String start;
     private String destination;
 
-    public DirectionFinder(DirectionFinderListener listener, String origin, String destination) {
-        this.listener = listener;
+    public DirectionFinder(DirectionFinderListener dfl, String origin, String destination) {
+        this.finder = dfl;
         this.start = origin;
         this.destination = destination;
     }
     public void execute() throws UnsupportedEncodingException {
-        listener.onDirectionFinderStart();
         new DownloadRawData().execute(createUrl());
     }
 
 
     private String createUrl() throws UnsupportedEncodingException {
-        String urlOrigin = URLEncoder.encode(start, "utf-8");
-        String urlDestination = URLEncoder.encode(destination, "utf-8");
-
-
-        return "https://maps.googleapis.com/maps/api/directions/json?" + "origin=" + urlOrigin + "&destination=" + urlDestination + "&key=" + GOOGLE_API_KEY;
+        String origin = URLEncoder.encode(start, "utf-8");
+        String dest = URLEncoder.encode(destination, "utf-8");
+        return "https://maps.googleapis.com/maps/api/directions/json?" + "origin=" + origin + "&destination=" + dest + "&key=" + GOOGLE_API_KEY;
     }
 
     private class DownloadRawData extends AsyncTask<String, Void, String> {
@@ -74,9 +69,9 @@ public class DirectionFinder {
         }
 
         @Override
-        protected void onPostExecute(String res) {
+        protected void onPostExecute(String s) {
             try {
-                parseJSon(res);
+                parseJSon(s);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -113,7 +108,7 @@ public class DirectionFinder {
             routes.add(route);
         }
 
-        listener.onDirectionFinderSuccess(routes);
+        finder.onDirectionFinderSuccess(routes);
     }
 
     private List<LatLng> decodePolyLine(final String poly) {
