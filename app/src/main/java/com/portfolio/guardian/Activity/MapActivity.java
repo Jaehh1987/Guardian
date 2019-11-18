@@ -4,7 +4,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -36,17 +35,18 @@ import com.portfolio.guardian.DirectionFinder.Route;
 import com.portfolio.guardian.DirectionFinder.DirectionFinderListener;
 import com.portfolio.guardian.DirectionFinder.DirectionFinder;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback,DirectionFinderListener{
+public class MapActivity extends FragmentActivity implements OnMapReadyCallback, DirectionFinderListener {
 
     private GoogleMap mMap;
-    // private Button btnFindPath;
-    private EditText startaddress;
-    private EditText destinationaddress;
-    private List<Marker> originMarkers = new ArrayList<>();
-    private List<Marker> destinationMarkers = new ArrayList<>();
+    private Button btnFindPath;
+    private EditText startAddress;
+    private EditText destinationAddress;
+
+    private List<Marker> startingPointMarker = new ArrayList<>();
+    private List<Marker> destinationPointMarker = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
-    private ProgressDialog progressDialog;
-    private ArrayList<String> startEnd = new ArrayList<>();
+    private List<Route> userRoutes = new ArrayList<>();
+
 
     private ArrayList<Marker> crimeMarkers = new ArrayList<>();
 
@@ -62,36 +62,42 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         mapFragment.getMapAsync(this);
         Intent intent = getIntent();
-        String start =intent.getStringExtra("start");
-        String destination =intent.getStringExtra("destination");
+        String start = intent.getStringExtra("start");
+        String destination = intent.getStringExtra("destination");
 
-        //btnFindPath = findViewById(R.id.btnFindPath);
-        startaddress = findViewById(R.id.etOrigin);
-        destinationaddress = findViewById(R.id.etDestination);
+        btnFindPath = findViewById(R.id.btnPathFinder);
+        startAddress = findViewById(R.id.etStart);
+        destinationAddress = findViewById(R.id.etDest);
 
-        startaddress.setText(start);
-        destinationaddress.setText(destination);
-        sendRequest();
+        startAddress.setText(start);
+        destinationAddress.setText(destination);
+        sendRequestFromGuardian();
+        startAddress.setText("");
+        destinationAddress.setText("");
+        btnFindPath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (startingPointMarker != null) {
+                    for (Marker m : startingPointMarker) {
+                        m.remove();
+                    }
+                }
 
-//        btnFindPath.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                sendRequest();
-//            }
-//        });
-
-
+                if (polylinePaths != null) {
+                    for (Polyline p : polylinePaths) {
+                        p.remove();
+                    }
+                }
+                sendRequestFromGuardian();
+            }
+        });
     }
 
-    private void sendRequest() {
-        String origin = startaddress.getText().toString();
-        String destination = destinationaddress.getText().toString();
-        if (origin.isEmpty()) {
-            Toast.makeText(this, "Your current location", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (destination.isEmpty()) {
-            Toast.makeText(this, "Where would you like to go?", Toast.LENGTH_SHORT).show();
+    private void sendRequestFromGuardian() {
+        String origin = startAddress.getText().toString();
+        String destination = destinationAddress.getText().toString();
+        if (origin.isEmpty() || destination.isEmpty()) {
+            Toast.makeText(this, "Opps! Maybe you forgot to add something!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -100,6 +106,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -128,63 +135,60 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     }
 
     @Override
-    public void onDirectionFinderStart() {
-        progressDialog = ProgressDialog.show(this, "Please wait.",
-                "Finding direction..!", true);
-
-        if (originMarkers != null) {
-            for (Marker marker : originMarkers) {
-                marker.remove();
-            }
-        }
-        if (destinationMarkers != null) {
-            for (Marker marker : destinationMarkers) {
-                marker.remove();
-            }
-        }
-        if (polylinePaths != null) {
-            for (Polyline polyline:polylinePaths ) {
-                polyline.remove();
-            }
-        }
-    }
-
-    @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
-        progressDialog.dismiss();
         polylinePaths = new ArrayList<>();
-        originMarkers = new ArrayList<>();
-        destinationMarkers = new ArrayList<>();
-        startEnd = new ArrayList<>();
+        startingPointMarker = new ArrayList<>();
+        destinationPointMarker = new ArrayList<>();
+        userRoutes = new ArrayList<>();
+
+
+        String origin = startAddress.getText().toString();
+        String destination = destinationAddress.getText().toString();
 
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
             ((TextView) findViewById(R.id.tvDuration)).setText(route.duration.text);
             ((TextView) findViewById(R.id.tvDistance)).setText(route.distance.text);
 
-            originMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .title(route.startAddress)
+            startingPointMarker.add(mMap.addMarker(new MarkerOptions()
+                    .title(origin)
                     .position(route.startLocation)));
-            destinationMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .title(route.endAddress)
+
+            destinationPointMarker.add(mMap.addMarker(new MarkerOptions()
+                    .title(destination)
                     .position(route.endLocation)));
 
-//            startEnd.add(route.startAddress.toString());
-//            System.out.println(route.startAddress.toString());
-//            startEnd.add(route.endAddress.toString());
-//            System.out.println(route.endAddress.toString());
-//
 
-
-            PolylineOptions polylineOptions = new PolylineOptions().
-                    geodesic(true).
-                    color(Color.BLUE).
-                    width(10);
+            PolylineOptions polylineOptions =
+                    new PolylineOptions().geodesic(true).color(Color.GREEN).width(7);
 
             for (int i = 0; i < route.points.size(); i++)
                 polylineOptions.add(route.points.get(i));
-
             polylinePaths.add(mMap.addPolyline(polylineOptions));
+
+            userRoutes.add(route);
+
+            for (int i = 0; i < userRoutes.size(); i++) {
+                System.out.println(userRoutes.get(i).startAddress);
+                System.out.println(userRoutes.get(i).endAddress);
+                System.out.println(userRoutes.get(i).startLocation);
+                System.out.println(userRoutes.get(i).endLocation);
+            }
+
         }
+
+    }
+
+    public List<Route> GetUserRoute(List<Route> r) {
+        for (int i = 0; i < userRoutes.size(); i++) {
+            System.out.println(userRoutes.get(i).startAddress);
+            System.out.println(userRoutes.get(i).endAddress);
+            System.out.println(userRoutes.get(i).startLocation);
+            System.out.println(userRoutes.get(i).endLocation);
+        }
+        return r;
     }
 }
+
+
+

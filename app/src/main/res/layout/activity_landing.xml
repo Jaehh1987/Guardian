@@ -86,7 +86,6 @@
         android:layout_height="48dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Going from?"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.522"
@@ -95,12 +94,11 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/etFrom"
+        android:id="@+id/eTFrom"
         android:layout_width="342dp"
         android:layout_height="46dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Going to?"
         app:layout_constraintBottom_toTopOf="@+id/tvFrom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.521"

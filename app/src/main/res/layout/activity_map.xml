@@ -1,19 +1,17 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/etOrigin"
+        android:id="@+id/etStart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter origin address" />
 
     <EditText
-        android:id="@+id/etDestination"
+        android:id="@+id/etDest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter destination address" />
@@ -24,37 +22,26 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnFindPath"
+            android:id="@+id/btnPathFinder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Find path" />
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            />
 
         <TextView
             android:id="@+id/tvDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_marginRight="6dp"
             android:text="0 km" />
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:padding="5dp" />
 
         <TextView
             android:id="@+id/tvDuration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_marginRight="6dp"
             android:text="0 min" />
     </LinearLayout>
 
