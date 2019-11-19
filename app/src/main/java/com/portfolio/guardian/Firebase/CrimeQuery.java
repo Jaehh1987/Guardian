@@ -1,34 +1,39 @@
 package com.portfolio.guardian.Firebase;
 
-import android.app.Activity;
 import android.os.AsyncTask;
-import android.widget.ListView;
-
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.portfolio.guardian.DirectionFinder.Route;
 import com.portfolio.guardian.Util.Crime;
+import com.portfolio.guardian.Util.UTM;
+import com.portfolio.guardian.Util.WGS84;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class CrimeQuery extends AsyncTask<String, String, ArrayList<Crime>> {
+public class CrimeQuery extends AsyncTask<Route, String, ArrayList<Crime>> {
 
-    private final Activity activity;
-    private final ListView listView;
+    private final GoogleMap mMap;
+    private final ArrayList<Marker> markers;
     DatabaseReference databaseCrime;
     ArrayList<Crime> crimeList;
 
-    public CrimeQuery(final Activity activity, final ListView listView) {
-        this.activity = activity;
-        this.listView = listView;
+    public CrimeQuery(final GoogleMap mMap, final ArrayList<Marker> markers) {
+        this.mMap = mMap;
+        this.markers = markers;
     }
 
     protected void onPreExecute() {
@@ -37,13 +42,45 @@ public class CrimeQuery extends AsyncTask<String, String, ArrayList<Crime>> {
     }
 
     @Override
-    protected ArrayList<Crime> doInBackground(String... strings) {
+    protected ArrayList<Crime> doInBackground(Route... route) {
 
-        String neighborhood = strings[0];
+        // convert global latitude & longitude in route to UTM 10 U coordinate
+
+        LatLng start = route[0].startLocation;
+        LatLng end = route[0].endLocation;
+
+        double minLat, maxLat, minLng, maxLng;
+
+        if (start.latitude < end.latitude) {
+            minLat = start.latitude;
+            maxLat = end.latitude;
+        } else {
+            minLat = end.latitude;
+            maxLat = start.latitude;
+        }
+
+        if (start.longitude < end.longitude) {
+            minLng = start.longitude;
+            maxLng = end.longitude;
+        } else {
+            minLng = end.longitude;
+            maxLng = start.longitude;
+        }
+
+        WGS84 wgsMin = new WGS84(minLat, minLng);
+        WGS84 wgsMax = new WGS84(maxLat, maxLng);
+        UTM utmMin = new UTM(wgsMin);
+        UTM utmMax = new UTM(wgsMax);
+
+        // query crime data in specific area
+
         crimeList.clear();
 
-        Query testQuery = databaseCrime.orderByChild("NEIGHBOURHOOD").equalTo(neighborhood);
-        testQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query testQuery = databaseCrime
+                .orderByChild("X").startAt(utmMin.getEasting()).endAt(utmMax.getEasting());
+                //.orderByChild("Y").startAt(utmMin.getNorthing()).endAt(utmMax.getNorthing());
+
+        testQuery.addListenerForSingleValueEvent((new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -68,10 +105,19 @@ public class CrimeQuery extends AsyncTask<String, String, ArrayList<Crime>> {
 
                     crimeList.add(crime);
                 }
+                for (Crime c : crimeList) {
+                    UTM utm = new UTM(10, 'U', c.getX(), c.getY());
+                    WGS84 wgs = new WGS84(utm);
+                    markers.add(mMap.addMarker((new MarkerOptions()
+                            .position(new LatLng(wgs.getLatitude(), wgs.getLongitude())))));
+                }
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        }));
         return crimeList;
     }
 

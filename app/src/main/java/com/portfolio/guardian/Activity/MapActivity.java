@@ -18,12 +18,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.portfolio.guardian.Firebase.CrimeQuery;
 import com.portfolio.guardian.R;
 
 import java.io.UnsupportedEncodingException;
@@ -45,7 +47,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private List<Marker> destinationPointMarker = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
     private List<Route> userRoutes = new ArrayList<>();
-
+    private ArrayList<Marker> crimeMarkers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +122,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+//            CrimeQuery crimeQuery = new CrimeQuery(mMap, crimeMarkers);
+//            Route test = new Route();
+//            test.startLocation = new LatLng(49.26380906, -123.04123053);
+//            test.endLocation = new LatLng(49.25969263, -123.17263202);
+//            crimeQuery.execute(test);
             return;
         }
         mMap.setMyLocationEnabled(true);
@@ -143,12 +150,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             ((TextView) findViewById(R.id.tvDistance)).setText(route.distance.text);
 
             startingPointMarker.add
-                    (mMap.addMarker(new MarkerOptions().title(origin).position(route.startLocation)));
-            // .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
+                    (mMap.addMarker(new MarkerOptions().title(origin).position(route.startLocation)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))));
 
             destinationPointMarker.add
-                    (mMap.addMarker(new MarkerOptions().title(destination).position(route.endLocation)));
-            //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)
+                    (mMap.addMarker(new MarkerOptions().title(destination).position(route.endLocation)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))));
 
             PolylineOptions polylineOptions =
                     new PolylineOptions().geodesic(true).color(Color.GREEN).width(7);
