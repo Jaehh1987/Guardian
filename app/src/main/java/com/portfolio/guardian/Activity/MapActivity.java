@@ -34,6 +34,7 @@ import java.util.List;
 import com.portfolio.guardian.DirectionFinder.Route;
 import com.portfolio.guardian.DirectionFinder.DirectionFinderListener;
 import com.portfolio.guardian.DirectionFinder.DirectionFinder;
+import com.portfolio.guardian.Util.Crime;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback, DirectionFinderListener {
 
@@ -46,7 +47,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private List<Marker> destinationPointMarker = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
     private List<Route> userRoutes = new ArrayList<>();
-
 
     private ArrayList<Marker> crimeMarkers = new ArrayList<>();
 
@@ -122,16 +122,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-//            CrimeQuery crimeQuery = new CrimeQuery(mMap, crimeMarkers);
-//            Route test = new Route();
-//            test.startLocation = new LatLng(49.26380906, -123.04123053);
-//            test.endLocation = new LatLng(49.25969263, -123.17263202);
-//            crimeQuery.execute(test);
             return;
         }
         mMap.setMyLocationEnabled(true);
-
-
     }
 
     @Override
@@ -140,7 +133,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         startingPointMarker = new ArrayList<>();
         destinationPointMarker = new ArrayList<>();
         userRoutes = new ArrayList<>();
-
 
         String origin = startAddress.getText().toString();
         String destination = destinationAddress.getText().toString();
@@ -167,16 +159,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             polylinePaths.add(mMap.addPolyline(polylineOptions));
 
             userRoutes.add(route);
-
-            for (int i = 0; i < userRoutes.size(); i++) {
-                System.out.println(userRoutes.get(i).startAddress);
-                System.out.println(userRoutes.get(i).endAddress);
-                System.out.println(userRoutes.get(i).startLocation);
-                System.out.println(userRoutes.get(i).endLocation);
-            }
-
         }
-
+        CrimeQuery crimeQuery = new CrimeQuery(mMap, crimeMarkers);
+        crimeQuery.execute(userRoutes.get(0));
     }
 
     public List<Route> GetUserRoute(List<Route> r) {

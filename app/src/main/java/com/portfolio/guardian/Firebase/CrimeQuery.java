@@ -22,7 +22,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class CrimeQuery extends AsyncTask<Route, String, ArrayList<Crime>> {
 
@@ -69,16 +68,15 @@ public class CrimeQuery extends AsyncTask<Route, String, ArrayList<Crime>> {
 
         WGS84 wgsMin = new WGS84(minLat, minLng);
         WGS84 wgsMax = new WGS84(maxLat, maxLng);
-        UTM utmMin = new UTM(wgsMin);
-        UTM utmMax = new UTM(wgsMax);
+        final UTM utmMin = new UTM(wgsMin);
+        final UTM utmMax = new UTM(wgsMax);
 
         // query crime data in specific area
 
         crimeList.clear();
 
         Query testQuery = databaseCrime
-                .orderByChild("X").startAt(utmMin.getEasting()).endAt(utmMax.getEasting());
-                //.orderByChild("Y").startAt(utmMin.getNorthing()).endAt(utmMax.getNorthing());
+                .orderByChild("X").startAt(utmMin.getEasting() - 100).endAt(utmMax.getEasting() + 100);
 
         testQuery.addListenerForSingleValueEvent((new ValueEventListener() {
             @Override
@@ -101,9 +99,11 @@ public class CrimeQuery extends AsyncTask<Route, String, ArrayList<Crime>> {
                     }
                     crime.setDate(date);
                     crime.setX(((Number) crimeSnapshot.child("X").getValue()).longValue());
-                    crime.setY(((Number) crimeSnapshot.child("X").getValue()).longValue());
+                    crime.setY(((Number) crimeSnapshot.child("Y").getValue()).longValue());
 
-                    crimeList.add(crime);
+                    if (crime.getY() > utmMin.getNorthing() - 100 && crime.getY() < utmMax.getNorthing() + 100) {
+                        crimeList.add(crime);
+                    }
                 }
                 for (Crime c : crimeList) {
                     UTM utm = new UTM(10, 'U', c.getX(), c.getY());
