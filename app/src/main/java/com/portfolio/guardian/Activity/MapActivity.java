@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -117,8 +117,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng vancouverDowntown = new LatLng(49.282637, -123.118569);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vancouverDowntown, 16));
         mMap.setOnMarkerClickListener(this);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vancouverDowntown, 12));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -147,13 +147,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             ((TextView) findViewById(R.id.tvDuration)).setText(route.duration.text);
             ((TextView) findViewById(R.id.tvDistance)).setText(route.distance.text);
 
-            startingPointMarker.add(mMap.addMarker(new MarkerOptions()
-                    .title(origin)
-                    .position(route.startLocation)));
+            startingPointMarker.add
+                    (mMap.addMarker(new MarkerOptions().title(origin).position(route.startLocation)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))));
 
-            destinationPointMarker.add(mMap.addMarker(new MarkerOptions()
-                    .title(destination)
-                    .position(route.endLocation)));
+            destinationPointMarker.add
+                    (mMap.addMarker(new MarkerOptions().title(destination).position(route.endLocation)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))));
+
 
 
             PolylineOptions polylineOptions =
@@ -171,28 +172,32 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-
-        LayoutInflater inflater = getLayoutInflater();
-
-        final View dialogView = inflater.inflate(R.layout.update_dialog, null);
-        dialogBuilder.setView(dialogView);
-
-        final TextView tvDialogTypeValue = dialogView.findViewById(R.id.tvDialogTypeValue);
-        final TextView tvDialogWhenValue = dialogView.findViewById(R.id.tvDialogWhenValue);
-        final TextView tvDialogWhereValue = dialogView.findViewById(R.id.tvDialogWhereValue);
 
         Crime crime = (Crime) marker.getTag();
 
-        tvDialogTypeValue.setText(crime.getType());
-        SimpleDateFormat dest = new SimpleDateFormat(("dd/MMM/yyyy hh:mm"), Locale.ENGLISH);
-        tvDialogWhenValue.setText(dest.format(crime.getDate()));
-        tvDialogWhereValue.setText(crime.getNeighborhood());
+        if (crime != null) {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 
-        final AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
+            LayoutInflater inflater = getLayoutInflater();
 
-        return false;
+            final View dialogView = inflater.inflate(R.layout.update_dialog, null);
+            dialogBuilder.setView(dialogView);
+
+            final TextView tvDialogTypeValue = dialogView.findViewById(R.id.tvDialogTypeValue);
+            final TextView tvDialogWhenValue = dialogView.findViewById(R.id.tvDialogWhenValue);
+            final TextView tvDialogWhereValue = dialogView.findViewById(R.id.tvDialogWhereValue);
+
+            tvDialogTypeValue.setText(crime.getType());
+            SimpleDateFormat dest = new SimpleDateFormat(("dd/MMM/yyyy hh:mm"), Locale.ENGLISH);
+            tvDialogWhenValue.setText(dest.format(crime.getDate()));
+            tvDialogWhereValue.setText(crime.getNeighborhood());
+
+            final AlertDialog alertDialog = dialogBuilder.create();
+            alertDialog.show();
+
+            return false;
+        }
+        return true;
     }
 }
 

@@ -114,6 +114,8 @@ public class CrimeQuery extends AsyncTask<Route, String, ArrayList<Crime>> {
                             .position(new LatLng(wgs.getLatitude(), wgs.getLongitude())))));
                     markers.get(markers.size() - 1).setTag(c);
                 }
+
+
             }
 
             @Override

@@ -57,7 +57,7 @@
         android:layout_height="26dp"
         android:fontStyle="normal"
         android:fontWeight="400"
-        android:text="Where would you like to go?"
+        android:text="Where would you like to depart?"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -71,7 +71,7 @@
         android:layout_height="31dp"
         android:fontStyle="normal"
         android:fontWeight="400"
-        android:text="Where would you like to depart?"
+        android:text="Where would you like to go?"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.539"
@@ -115,6 +115,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etTo"
+        android:background="@drawable/button_design"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
