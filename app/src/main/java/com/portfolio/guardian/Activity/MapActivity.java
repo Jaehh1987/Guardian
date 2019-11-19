@@ -117,8 +117,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng vancouverDowntown = new LatLng(49.282637, -123.118569);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vancouverDowntown, 12));
         mMap.setOnMarkerClickListener(this);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vancouverDowntown, 12));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
