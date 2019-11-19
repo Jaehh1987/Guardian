@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvDialogHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_margin="20dp"
+        android:text="@string/tvDialogHeader"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tvDialogType"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/tvDialogType"
+        android:layout_below="@id/tvDialogHeader" />
+
+    <TextView
+        android:id="@+id/tvDialogTypeValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@id/tvDialogHeader"
+        android:layout_toEndOf="@id/tvDialogType" />
+
+    <TextView
+        android:id="@+id/tvDialogWhen"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/tvDialogWhen"
+        android:layout_below="@id/tvDialogType" />
+
+    <TextView
+        android:id="@+id/tvDialogWhenValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@id/tvDialogType"
+        android:layout_toEndOf="@id/tvDialogWhen" />
+
+    <TextView
+        android:id="@+id/tvDialogWhere"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:paddingTop="15dp"
+        android:text="@string/tvDialogWhere"
+        android:layout_below="@id/tvDialogWhen" />
+
+    <TextView
+        android:id="@+id/tvDialogWhereValue1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/tvDialogWhen"
+        android:layout_toEndOf="@id/tvDialogWhere" />
+
+    <TextView
+        android:id="@+id/tvDialogWhereValue2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@id/tvDialogWhereValue1"
+        android:layout_toEndOf="@id/tvDialogWhere" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvDialogWhereValue2" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:text="@string/tvDialogSource"
+            android:gravity="center" />
+
+    </LinearLayout>
+
+</RelativeLayout>

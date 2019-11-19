@@ -2,7 +2,7 @@
     <string name="app_name">Guardian</string>
     <string name="title_activity_navigate">Map</string>
     <string name="title_activity_map">Map</string>
-    <string name="tvDialogType">Crime Type:</string>
+    <string name="tvDialogType">Type:</string>
     <string name="tvDialogHeader">Crime Information</string>
     <string name="tvDialogWhen">When:</string>
     <string name="tvDialogSource">This information is from Open Data of Vancouver Police Department</string>
