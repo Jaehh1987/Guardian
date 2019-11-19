@@ -111,6 +111,8 @@ public class CrimeQuery extends AsyncTask<Route, String, ArrayList<Crime>> {
                     markers.add(mMap.addMarker((new MarkerOptions()
                             .position(new LatLng(wgs.getLatitude(), wgs.getLongitude())))));
                 }
+
+
             }
 
             @Override

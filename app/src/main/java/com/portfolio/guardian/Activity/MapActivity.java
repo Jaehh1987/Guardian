@@ -18,6 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -36,12 +37,13 @@ import com.portfolio.guardian.DirectionFinder.DirectionFinderListener;
 import com.portfolio.guardian.DirectionFinder.DirectionFinder;
 import com.portfolio.guardian.Util.Crime;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback, DirectionFinderListener {
+public class MapActivity extends FragmentActivity implements OnMapReadyCallback, DirectionFinderListener{
 
     private GoogleMap mMap;
     private Button btnFindPath;
     private EditText startAddress;
     private EditText destinationAddress;
+
 
     private List<Marker> startingPointMarker = new ArrayList<>();
     private List<Marker> destinationPointMarker = new ArrayList<>();
@@ -113,7 +115,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng vancouverDowntown = new LatLng(49.282637, -123.118569);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vancouverDowntown, 16));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vancouverDowntown, 12));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -126,6 +128,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         }
         mMap.setMyLocationEnabled(true);
     }
+
 
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
@@ -142,13 +145,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             ((TextView) findViewById(R.id.tvDuration)).setText(route.duration.text);
             ((TextView) findViewById(R.id.tvDistance)).setText(route.distance.text);
 
-            startingPointMarker.add(mMap.addMarker(new MarkerOptions()
-                    .title(origin)
-                    .position(route.startLocation)));
+            startingPointMarker.add
+                    (mMap.addMarker(new MarkerOptions().title(origin).position(route.startLocation)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))));
 
-            destinationPointMarker.add(mMap.addMarker(new MarkerOptions()
-                    .title(destination)
-                    .position(route.endLocation)));
+            destinationPointMarker.add
+                    (mMap.addMarker(new MarkerOptions().title(destination).position(route.endLocation)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))));
+
 
 
             PolylineOptions polylineOptions =
@@ -162,17 +166,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         }
         CrimeQuery crimeQuery = new CrimeQuery(mMap, crimeMarkers);
         crimeQuery.execute(userRoutes.get(0));
+
+
     }
 
-    public List<Route> GetUserRoute(List<Route> r) {
-        for (int i = 0; i < userRoutes.size(); i++) {
-            System.out.println(userRoutes.get(i).startAddress);
-            System.out.println(userRoutes.get(i).endAddress);
-            System.out.println(userRoutes.get(i).startLocation);
-            System.out.println(userRoutes.get(i).endLocation);
-        }
-        return r;
-    }
+
+
 }
 
 
