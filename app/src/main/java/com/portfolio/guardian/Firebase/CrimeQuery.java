@@ -91,9 +91,11 @@ public class CrimeQuery extends AsyncTask<Route, String, ArrayList<Crime>> {
                     long year = (Long) crimeSnapshot.child("YEAR").getValue();
                     long month = (Long) crimeSnapshot.child("MONTH").getValue();
                     long day = (Long) crimeSnapshot.child("DAY").getValue();
+                    long hour = (Long) crimeSnapshot.child("HOUR").getValue();
+                    long minute = (Long) crimeSnapshot.child("MINUTE").getValue();
                     Date date = null;
                     try {
-                        date = new SimpleDateFormat("yyyy-MM-dd").parse(year + "-" + month + "-" + day);
+                        date = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(year + "-" + month + "-" + day + " " + hour + ":" + minute);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -110,6 +112,7 @@ public class CrimeQuery extends AsyncTask<Route, String, ArrayList<Crime>> {
                     WGS84 wgs = new WGS84(utm);
                     markers.add(mMap.addMarker((new MarkerOptions()
                             .position(new LatLng(wgs.getLatitude(), wgs.getLongitude())))));
+                    markers.get(markers.size() - 1).setTag(c);
                 }
             }
 

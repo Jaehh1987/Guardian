@@ -4,10 +4,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,15 +31,17 @@ import com.portfolio.guardian.Firebase.CrimeQuery;
 import com.portfolio.guardian.R;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import com.portfolio.guardian.DirectionFinder.Route;
 import com.portfolio.guardian.DirectionFinder.DirectionFinderListener;
 import com.portfolio.guardian.DirectionFinder.DirectionFinder;
 import com.portfolio.guardian.Util.Crime;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback, DirectionFinderListener {
+public class MapActivity extends FragmentActivity implements OnMapReadyCallback, DirectionFinderListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private Button btnFindPath;
@@ -106,7 +111,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -114,6 +118,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         mMap = googleMap;
         LatLng vancouverDowntown = new LatLng(49.282637, -123.118569);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vancouverDowntown, 16));
+        mMap.setOnMarkerClickListener(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -164,14 +169,30 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         crimeQuery.execute(userRoutes.get(0));
     }
 
-    public List<Route> GetUserRoute(List<Route> r) {
-        for (int i = 0; i < userRoutes.size(); i++) {
-            System.out.println(userRoutes.get(i).startAddress);
-            System.out.println(userRoutes.get(i).endAddress);
-            System.out.println(userRoutes.get(i).startLocation);
-            System.out.println(userRoutes.get(i).endLocation);
-        }
-        return r;
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+
+        LayoutInflater inflater = getLayoutInflater();
+
+        final View dialogView = inflater.inflate(R.layout.update_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final TextView tvDialogTypeValue = dialogView.findViewById(R.id.tvDialogTypeValue);
+        final TextView tvDialogWhenValue = dialogView.findViewById(R.id.tvDialogWhenValue);
+        final TextView tvDialogWhereValue = dialogView.findViewById(R.id.tvDialogWhereValue);
+
+        Crime crime = (Crime) marker.getTag();
+
+        tvDialogTypeValue.setText(crime.getType());
+        SimpleDateFormat dest = new SimpleDateFormat(("dd/MMM/yyyy hh:mm"), Locale.ENGLISH);
+        tvDialogWhenValue.setText(dest.format(crime.getDate()));
+        tvDialogWhereValue.setText(crime.getNeighborhood());
+
+        final AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+        return false;
     }
 }
 
