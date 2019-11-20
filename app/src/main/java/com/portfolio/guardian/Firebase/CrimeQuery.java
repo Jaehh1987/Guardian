@@ -1,5 +1,6 @@
 package com.portfolio.guardian.Firebase;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 
@@ -15,6 +16,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.portfolio.guardian.DirectionFinder.Route;
 import com.portfolio.guardian.Util.Crime;
+import com.portfolio.guardian.Util.DangerousTime;
 import com.portfolio.guardian.Util.UTM;
 import com.portfolio.guardian.Util.WGS84;
 
@@ -27,10 +29,12 @@ public class CrimeQuery extends AsyncTask<Route, String, ArrayList<Crime>> {
 
     private final GoogleMap mMap;
     private final ArrayList<Marker> markers;
+    private Context context;
     DatabaseReference databaseCrime;
     ArrayList<Crime> crimeList;
 
-    public CrimeQuery(final GoogleMap mMap, final ArrayList<Marker> markers) {
+    public CrimeQuery(Context context, final GoogleMap mMap, final ArrayList<Marker> markers) {
+        this.context = context;
         this.mMap = mMap;
         this.markers = markers;
     }
@@ -115,6 +119,9 @@ public class CrimeQuery extends AsyncTask<Route, String, ArrayList<Crime>> {
                             .position(new LatLng(wgs.getLatitude(), wgs.getLongitude())))));
                     markers.get(markers.size() - 1).setTag(c);
                 }
+
+                DangerousTime dangerousTime = new DangerousTime(context, crimeList);
+                dangerousTime.findTimeline();
             }
 
             @Override

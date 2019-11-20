@@ -156,7 +156,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))));
 
 
-
             PolylineOptions polylineOptions =
                     new PolylineOptions().geodesic(true).color(Color.GREEN).width(7);
 
@@ -166,7 +165,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
             userRoutes.add(route);
         }
-        CrimeQuery crimeQuery = new CrimeQuery(mMap, crimeMarkers);
+        CrimeQuery crimeQuery = new CrimeQuery(this, mMap, crimeMarkers);
         crimeQuery.execute(userRoutes.get(0));
     }
 
