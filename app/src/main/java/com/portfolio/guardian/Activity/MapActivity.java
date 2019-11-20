@@ -153,7 +153,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
             destinationPointMarker.add
                     (mMap.addMarker(new MarkerOptions().title("Destination:" + destination).position(route.endLocation)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))));
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))));
 
 
             PolylineOptions polylineOptions =
