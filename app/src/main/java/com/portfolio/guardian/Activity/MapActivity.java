@@ -149,11 +149,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             ((TextView) findViewById(R.id.tvDistance)).setText(route.distance.text);
 
             startingPointMarker.add
-                    (mMap.addMarker(new MarkerOptions().title(origin).position(route.startLocation)
+                    (mMap.addMarker(new MarkerOptions().title("Start:"+origin).position(route.startLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))));
 
             destinationPointMarker.add
-                    (mMap.addMarker(new MarkerOptions().title(destination).position(route.endLocation)
+                    (mMap.addMarker(new MarkerOptions().title("Destination:" + destination).position(route.endLocation)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))));
 
 
