@@ -81,22 +81,22 @@
 
     <TextView
         android:id="@+id/tvDuration"
-        android:layout_width="67dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="124dp"
         android:text="0 min"
         app:layout_constraintEnd_toStartOf="@+id/btnPathFinder"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.034"
         app:layout_constraintStart_toEndOf="@+id/tvDistance"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
     <TextView
         android:id="@+id/tvDistance"
-        android:layout_width="67dp"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="124dp"
         android:text="0 km"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
