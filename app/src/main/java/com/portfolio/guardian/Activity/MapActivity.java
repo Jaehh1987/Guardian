@@ -118,7 +118,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         mMap = googleMap;
         LatLng vancouverDowntown = new LatLng(49.282637, -123.118569);
         mMap.setOnMarkerClickListener(this);
-
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vancouverDowntown, 12));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -181,17 +180,19 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
             LayoutInflater inflater = getLayoutInflater();
 
-            final View dialogView = inflater.inflate(R.layout.update_dialog, null);
+            final View dialogView = inflater.inflate(R.layout.update_dialog_relative, null);
             dialogBuilder.setView(dialogView);
 
             final TextView tvDialogTypeValue = dialogView.findViewById(R.id.tvDialogTypeValue);
             final TextView tvDialogWhenValue = dialogView.findViewById(R.id.tvDialogWhenValue);
-            final TextView tvDialogWhereValue = dialogView.findViewById(R.id.tvDialogWhereValue);
+            final TextView tvDialogWhereValue1 = dialogView.findViewById(R.id.tvDialogWhereValue1);
+            final TextView tvDialogWhereValue2 = dialogView.findViewById(R.id.tvDialogWhereValue2);
 
             tvDialogTypeValue.setText(crime.getType());
             SimpleDateFormat dest = new SimpleDateFormat(("dd/MMM/yyyy hh:mm"), Locale.ENGLISH);
             tvDialogWhenValue.setText(dest.format(crime.getDate()));
-            tvDialogWhereValue.setText(crime.getNeighborhood());
+            tvDialogWhereValue1.setText(crime.getNeighborhood());
+            tvDialogWhereValue2.setText(crime.getBlock());
 
             final AlertDialog alertDialog = dialogBuilder.create();
             alertDialog.show();

@@ -88,6 +88,7 @@ public class CrimeQuery extends AsyncTask<Route, String, ArrayList<Crime>> {
 
                     crime.setType((String)crimeSnapshot.child("TYPE").getValue());
                     crime.setNeighborhood((String)crimeSnapshot.child("NEIGHBOURHOOD").getValue());
+                    crime.setBlock((String)crimeSnapshot.child("HUNDRED_BLOCK").getValue());
                     long year = (Long) crimeSnapshot.child("YEAR").getValue();
                     long month = (Long) crimeSnapshot.child("MONTH").getValue();
                     long day = (Long) crimeSnapshot.child("DAY").getValue();
@@ -114,8 +115,6 @@ public class CrimeQuery extends AsyncTask<Route, String, ArrayList<Crime>> {
                             .position(new LatLng(wgs.getLatitude(), wgs.getLongitude())))));
                     markers.get(markers.size() - 1).setTag(c);
                 }
-
-
             }
 
             @Override

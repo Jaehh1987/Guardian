@@ -7,6 +7,7 @@ public class Crime {
     private String type;
     private Date date;
     private String neighborhood;
+    private String block;
     private long x;
     private long y;
 
@@ -32,6 +33,8 @@ public class Crime {
         return neighborhood;
     }
 
+    public String getBlock() { return block; }
+
     public long getX() {
         return x;
     }
@@ -51,6 +54,8 @@ public class Crime {
     public void setNeighborhood(String neighborhood) {
         this.neighborhood = neighborhood;
     }
+
+    public void setBlock(String block) { this.block = block; }
 
     public void setX(long x) {
         this.x = x;
