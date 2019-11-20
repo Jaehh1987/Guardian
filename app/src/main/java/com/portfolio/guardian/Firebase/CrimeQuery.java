@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -15,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.portfolio.guardian.DirectionFinder.Route;
+import com.portfolio.guardian.R;
 import com.portfolio.guardian.Util.Crime;
 import com.portfolio.guardian.Util.DangerousTime;
 import com.portfolio.guardian.Util.UTM;
@@ -116,7 +118,8 @@ public class CrimeQuery extends AsyncTask<Route, String, ArrayList<Crime>> {
                     UTM utm = new UTM(10, 'U', c.getX(), c.getY());
                     WGS84 wgs = new WGS84(utm);
                     markers.add(mMap.addMarker((new MarkerOptions()
-                            .position(new LatLng(wgs.getLatitude(), wgs.getLongitude())))));
+                            .position(new LatLng(wgs.getLatitude(), wgs.getLongitude()))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.crime_icon)))));
                     markers.get(markers.size() - 1).setTag(c);
                 }
 
